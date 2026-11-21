@@ -1,0 +1,867 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>논증 방법으로 여는 우리 지역사회 - 주장하는 글쓰기</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Pretendard / Noto Sans KR Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        body {
+            font-family: 'Noto Sans KR', sans-serif;
+            background-color: #f8fafc;
+            color: #1e293b;
+        }
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+        .tab-active {
+            border-bottom: 3px solid #4f46e5;
+            color: #4f46e5;
+            font-weight: 700;
+            background-color: #eef2ff;
+        }
+        .hint-drawer {
+            transition: transform 0.3s ease-in-out;
+        }
+        @media print {
+            .no-print {
+                display: none !important;
+            }
+            .print-only {
+                display: block !important;
+            }
+            body {
+                background-color: white;
+            }
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col">
+
+    <!-- 상단 헤더 -->
+    <header class="bg-white border-b border-slate-200 sticky top-0 z-30 shadow-sm no-print">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col sm:flex-row justify-between items-center py-4 gap-3">
+                <div class="flex items-center gap-3">
+                    <div class="bg-indigo-600 text-white p-2.5 rounded-xl shadow-md">
+                        <i data-lucide="pen-tool" class="w-6 h-6"></i>
+                    </div>
+                    <div>
+                        <span class="text-xs font-bold uppercase tracking-wider text-indigo-600 bg-indigo-50 px-2.5 py-0.5 rounded-full">중3 국어 4. 논리로 여는 세상</span>
+                        <h1 class="text-lg sm:text-xl font-extrabold text-slate-900 mt-0.5">논증 방법으로 지역사회에 주장하는 글 쓰기</h1>
+                    </div>
+                </div>
+                
+                <!-- 우측 액션 버튼 (힌트 도우미 & 초기화) -->
+                <div class="flex items-center gap-2 w-full sm:w-auto justify-end">
+                    <button onclick="toggleHintModal()" class="flex items-center gap-1.5 bg-amber-100 hover:bg-amber-200 text-amber-900 font-semibold px-3.5 py-2 rounded-xl text-sm transition shadow-sm border border-amber-300">
+                        <i data-lucide="lightbulb" class="w-4 h-4 text-amber-600"></i>
+                        <span>생각 힌트 도우미</span>
+                    </button>
+                    <button onclick="openResetModal()" class="flex items-center gap-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-medium px-3 py-2 rounded-xl text-sm transition" title="작성 내용 초기화">
+                        <i data-lucide="rotate-ccw" class="w-4 h-4"></i>
+                        <span class="hidden md:inline">초기화</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- 탭 내비게이션 -->
+            <div class="flex border-t border-slate-100">
+                <button id="btn-tab1" onclick="switchTab(1)" class="tab-active flex-1 py-3.5 px-4 text-center text-sm sm:text-base font-medium transition flex items-center justify-center gap-2 rounded-t-lg">
+                    <span class="w-6 h-6 rounded-full bg-indigo-600 text-white text-xs flex items-center justify-center font-bold" id="badge-tab1">1</span>
+                    <span>1단계: 글쓰기 계획 및 논증 개요 짜기</span>
+                </button>
+                <button id="btn-tab2" onclick="switchTab(2)" class="flex-1 py-3.5 px-4 text-center text-sm sm:text-base font-medium text-slate-500 hover:text-slate-800 hover:bg-slate-50 transition flex items-center justify-center gap-2 rounded-t-lg">
+                    <span class="w-6 h-6 rounded-full bg-slate-300 text-white text-xs flex items-center justify-center font-bold" id="badge-tab2">2</span>
+                    <span>2단계: 개요 한눈에 보기 & 초고 쓰기</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- 메인 콘텐츠 영역 -->
+    <main class="flex-grow max-w-6xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
+        
+        <!-- ==================== TAB 1: 계획 및 개요 작성 ==================== -->
+        <section id="tab1-content" class="space-y-6">
+            
+            <!-- 안내 배너 -->
+            <div class="bg-gradient-to-r from-indigo-600 to-blue-600 rounded-2xl p-5 sm:p-6 text-white shadow-md flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+                <div>
+                    <h2 class="text-lg sm:text-xl font-bold flex items-center gap-2">
+                        <i data-lucide="compass" class="w-5 h-5"></i>
+                        스스로 고민하며 빈칸을 채워봅시다!
+                    </h2>
+                    <p class="text-indigo-100 text-sm mt-1 leading-relaxed">
+                        주제와 활용할 매체, 논증 방법은 여러분이 직접 결정합니다. 막막할 때는 각 항목 옆의 <strong class="text-amber-200 underline cursor-pointer" onclick="toggleHintModal()">[힌트 보기]</strong> 버튼을 눌러 스스로 생각의 실마리를 찾아보세요.
+                    </p>
+                </div>
+                <div class="bg-white/15 backdrop-blur-sm px-4 py-2.5 rounded-xl text-xs sm:text-sm shrink-0 border border-white/20">
+                    <div class="font-semibold text-amber-200">학번 / 이름</div>
+                    <div class="flex gap-2 mt-1">
+                        <input type="text" id="student-id" placeholder="예: 30101" class="w-24 bg-white/90 text-slate-900 px-2.5 py-1 rounded-lg text-sm font-medium focus:outline-none focus:ring-2 focus:ring-amber-300" oninput="saveData()">
+                        <input type="text" id="student-name" placeholder="이름 입력" class="w-28 bg-white/90 text-slate-900 px-2.5 py-1 rounded-lg text-sm font-medium focus:outline-none focus:ring-2 focus:ring-amber-300" oninput="saveData()">
+                    </div>
+                </div>
+            </div>
+
+            <!-- 1. 문제 상황 및 매체·독자 분석 카드 -->
+            <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-5 sm:p-7 space-y-6">
+                <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+                    <h3 class="text-lg font-bold text-slate-800 flex items-center gap-2">
+                        <span class="bg-indigo-100 text-indigo-700 px-2.5 py-1 rounded-lg text-sm">Part 1</span>
+                        주제 선정 및 독자·매체 계획하기
+                    </h3>
+                    <button onclick="openSpecificHint('topic')" class="text-xs sm:text-sm flex items-center gap-1 text-amber-700 bg-amber-50 hover:bg-amber-100 px-3 py-1.5 rounded-lg font-semibold border border-amber-200 transition">
+                        <i data-lucide="help-circle" class="w-4 h-4"></i> 주제·매체 고민 힌트
+                    </button>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                    <!-- 지역사회 문제(주제) -->
+                    <div class="md:col-span-2">
+                        <label class="block text-sm font-bold text-slate-700 mb-1.5">
+                            ① 내가 발견한 우리 지역사회의 문제 (글의 주제) <span class="text-rose-500">*</span>
+                        </label>
+                        <input type="text" id="plan-topic" oninput="saveData()"
+                            placeholder="예시 답안 대신, 우리 동네·학교 주변에서 직접 겪거나 본 문제점을 적어보세요."
+                            class="w-full rounded-xl border border-slate-300 px-4 py-3 text-slate-800 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 outline-none transition">
+                    </div>
+
+                    <!-- 예상 독자 -->
+                    <div>
+                        <label class="block text-sm font-bold text-slate-700 mb-1.5">
+                            ② 예상 독자 (이 글을 누구에게 읽히고 싶나요?) <span class="text-rose-500">*</span>
+                        </label>
+                        <input type="text" id="plan-audience" oninput="saveData()"
+                            placeholder="문제를 해결할 수 있는 사람이나 함께 공감할 대상을 적어보세요."
+                            class="w-full rounded-xl border border-slate-300 px-4 py-3 text-slate-800 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 outline-none transition">
+                    </div>
+
+                    <!-- 활용할 매체 -->
+                    <div>
+                        <label class="block text-sm font-bold text-slate-700 mb-1.5">
+                            ③ 활용할 매체 (어디에 글을 실을 것인가요?) <span class="text-rose-500">*</span>
+                        </label>
+                        <input type="text" id="plan-media" oninput="saveData()"
+                            placeholder="예상 독자가 가장 잘 볼 수 있는 매체를 스스로 선택해 적어보세요."
+                            class="w-full rounded-xl border border-slate-300 px-4 py-3 text-slate-800 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 outline-none transition">
+                    </div>
+
+                    <!-- 매체 선정 이유 -->
+                    <div class="md:col-span-2">
+                        <label class="block text-sm font-bold text-slate-700 mb-1.5">
+                            ④ 이 매체를 선택한 이유와 기대 효과
+                        </label>
+                        <input type="text" id="plan-media-reason" oninput="saveData()"
+                            placeholder="왜 그 매체가 내 주장을 전달하기에 가장 효과적일까요?"
+                            class="w-full rounded-xl border border-slate-300 px-4 py-2.5 text-slate-800 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 outline-none transition">
+                    </div>
+                </div>
+            </div>
+
+            <!-- 2. 핵심 주장 및 논증 방법 설계 카드 -->
+            <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-5 sm:p-7 space-y-6">
+                <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+                    <h3 class="text-lg font-bold text-slate-800 flex items-center gap-2">
+                        <span class="bg-emerald-100 text-emerald-700 px-2.5 py-1 rounded-lg text-sm">Part 2</span>
+                        핵심 주장과 논증 방법 구성하기
+                    </h3>
+                    <button onclick="openSpecificHint('argument')" class="text-xs sm:text-sm flex items-center gap-1 text-amber-700 bg-amber-50 hover:bg-amber-100 px-3 py-1.5 rounded-lg font-semibold border border-amber-200 transition">
+                        <i data-lucide="help-circle" class="w-4 h-4"></i> 논증 방법(귀납·연역·유추) 힌트
+                    </button>
+                </div>
+
+                <!-- 핵심 주장 -->
+                <div>
+                    <label class="block text-sm font-bold text-slate-700 mb-1.5">
+                        ⑤ 나의 핵심 주장 (지역사회에 요구하거나 제안하고 싶은 바) <span class="text-rose-500">*</span>
+                    </label>
+                    <textarea id="plan-claim" rows="2" oninput="saveData()"
+                        placeholder="문제 해결을 위해 무엇을 어떻게 바꾸자고 주장할 것인지 한 문장으로 명확하게 적어보세요."
+                        class="w-full rounded-xl border border-slate-300 px-4 py-3 text-slate-800 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 outline-none transition"></textarea>
+                </div>
+
+                <!-- 근거 1 (논증 방법 적용) -->
+                <div class="bg-slate-50 rounded-xl p-4 sm:p-5 border border-slate-200 space-y-4">
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                        <span class="font-bold text-indigo-900 flex items-center gap-2">
+                            <span class="bg-indigo-600 text-white w-6 h-6 rounded-full inline-flex items-center justify-center text-xs">1</span>
+                            첫 번째 근거와 논증 방법
+                        </span>
+                        <div class="flex items-center gap-2">
+                            <label class="text-xs font-semibold text-slate-600">사용할 논증 방법:</label>
+                            <select id="plan-arg1-method" onchange="saveData()" class="rounded-lg border border-slate-300 bg-white px-3 py-1.5 text-sm font-semibold text-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-300">
+                                <option value="">-- 직접 선택하세요 --</option>
+                                <option value="귀납 논증 (구체적 사례·통계)">귀납 논증 (구체적 사례·통계)</option>
+                                <option value="연역 논증 (일반적 원리·법칙 적용)">연역 논증 (일반적 원리·법칙 적용)</option>
+                                <option value="유추 (비슷한 다른 사례와 비교)">유추 (비슷한 다른 사례와 비교)</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-600 mb-1">수집한 자료 및 근거 내용 (뉴스 기사, 통계, 주변 사례 등)</label>
+                        <textarea id="plan-arg1-content" rows="3" oninput="saveData()"
+                            placeholder="선택한 논증 방식의 흐름이 드러나도록 구체적인 근거 내용을 작성해 보세요."
+                            class="w-full rounded-xl border border-slate-300 bg-white px-4 py-2.5 text-sm text-slate-800 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 outline-none transition"></textarea>
+                    </div>
+                </div>
+
+                <!-- 근거 2 (논증 방법 적용) -->
+                <div class="bg-slate-50 rounded-xl p-4 sm:p-5 border border-slate-200 space-y-4">
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                        <span class="font-bold text-emerald-900 flex items-center gap-2">
+                            <span class="bg-emerald-600 text-white w-6 h-6 rounded-full inline-flex items-center justify-center text-xs">2</span>
+                            두 번째 근거와 논증 방법
+                        </span>
+                        <div class="flex items-center gap-2">
+                            <label class="text-xs font-semibold text-slate-600">사용할 논증 방법:</label>
+                            <select id="plan-arg2-method" onchange="saveData()" class="rounded-lg border border-slate-300 bg-white px-3 py-1.5 text-sm font-semibold text-emerald-700 focus:outline-none focus:ring-2 focus:ring-emerald-300">
+                                <option value="">-- 직접 선택하세요 --</option>
+                                <option value="귀납 논증 (구체적 사례·통계)">귀납 논증 (구체적 사례·통계)</option>
+                                <option value="연역 논증 (일반적 원리·법칙 적용)">연역 논증 (일반적 원리·법칙 적용)</option>
+                                <option value="유추 (비슷한 다른 사례와 비교)">유추 (비슷한 다른 사례와 비교)</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-600 mb-1">수집한 자료 및 근거 내용 (다른 각도의 근거 또는 해결 방안의 타당성)</label>
+                        <textarea id="plan-arg2-content" rows="3" oninput="saveData()"
+                            placeholder="첫 번째 근거와 다른 논증 방법이나 새로운 자료를 활용해 주장을 더욱 탄탄하게 뒷받침해 보세요."
+                            class="w-full rounded-xl border border-slate-300 bg-white px-4 py-2.5 text-sm text-slate-800 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 outline-none transition"></textarea>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 3. 서론-본론-결론 개요 구상 카드 -->
+            <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-5 sm:p-7 space-y-5">
+                <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+                    <h3 class="text-lg font-bold text-slate-800 flex items-center gap-2">
+                        <span class="bg-purple-100 text-purple-700 px-2.5 py-1 rounded-lg text-sm">Part 3</span>
+                        글의 짜임(서론-본론-결론) 개요 메모
+                    </h3>
+                    <button onclick="openSpecificHint('structure')" class="text-xs sm:text-sm flex items-center gap-1 text-amber-700 bg-amber-50 hover:bg-amber-100 px-3 py-1.5 rounded-lg font-semibold border border-amber-200 transition">
+                        <i data-lucide="help-circle" class="w-4 h-4"></i> 개요 짜기 힌트
+                    </button>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div class="bg-purple-50/60 p-4 rounded-xl border border-purple-100">
+                        <label class="block text-sm font-bold text-purple-900 mb-1">서론 구상</label>
+                        <p class="text-xs text-purple-700 mb-2">독자의 관심 끌기 + 문제 제기 + 주장 밝히기</p>
+                        <textarea id="plan-outline-intro" rows="3" oninput="saveData()"
+                            placeholder="어떤 질문이나 사례로 글을 시작할까요?"
+                            class="w-full rounded-lg border border-purple-200 bg-white p-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-purple-300"></textarea>
+                    </div>
+                    <div class="bg-indigo-50/60 p-4 rounded-xl border border-indigo-100">
+                        <label class="block text-sm font-bold text-indigo-900 mb-1">본론 구상</label>
+                        <p class="text-xs text-indigo-700 mb-2">논증 방법(근거 1, 2)을 활용한 설득 전략</p>
+                        <textarea id="plan-outline-body" rows="3" oninput="saveData()"
+                            placeholder="근거 1과 근거 2를 어떤 순서로 연결할까요?"
+                            class="w-full rounded-lg border border-indigo-200 bg-white p-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-300"></textarea>
+                    </div>
+                    <div class="bg-teal-50/60 p-4 rounded-xl border border-teal-100">
+                        <label class="block text-sm font-bold text-teal-900 mb-1">결론 구상</label>
+                        <p class="text-xs text-teal-700 mb-2">핵심 내용 요약 + 행동 촉구 및 기대 효과</p>
+                        <textarea id="plan-outline-conclusion" rows="3" oninput="saveData()"
+                            placeholder="독자에게 어떤 실천이나 변화를 당부할까요?"
+                            class="w-full rounded-lg border border-teal-200 bg-white p-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-teal-300"></textarea>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 다음 단계 이동 버튼 -->
+            <div class="flex justify-end pt-2">
+                <button onclick="switchTab(2)" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold px-6 py-3.5 rounded-xl shadow-lg hover:shadow-xl transition flex items-center gap-2 text-base">
+                    <span>계획 내용 정리하고 초고 쓰러 가기</span>
+                    <i data-lucide="arrow-right" class="w-5 h-5"></i>
+                </button>
+            </div>
+        </section>
+
+
+        <!-- ==================== TAB 2: 개요 요약 및 초고 쓰기 ==================== -->
+        <section id="tab2-content" class="hidden space-y-8">
+            
+            <!-- 상단: 탭1에서 작성한 계획 한눈에 보기 대시보드 -->
+            <div class="bg-white rounded-2xl shadow-md border border-indigo-100 overflow-hidden">
+                <div class="bg-slate-800 text-white px-5 py-4 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                    <div class="flex items-center gap-2">
+                        <i data-lucide="layout-dashboard" class="w-5 h-5 text-indigo-400"></i>
+                        <h2 class="font-bold text-base sm:text-lg">내가 세운 글쓰기 계획 한눈에 보기</h2>
+                    </div>
+                    <button onclick="switchTab(1)" class="text-xs bg-slate-700 hover:bg-slate-600 text-slate-200 px-3 py-1.5 rounded-lg transition self-start sm:self-auto flex items-center gap-1 no-print">
+                        <i data-lucide="edit-3" class="w-3.5 h-3.5"></i> 계획 수정하기
+                    </button>
+                </div>
+
+                <!-- 시각적 요약 그리드 -->
+                <div class="p-5 sm:p-6 bg-slate-50/70 space-y-4">
+                    <!-- 기본 정보 3단 카드 -->
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
+                            <div class="text-xs font-bold text-indigo-600 uppercase mb-1 flex items-center gap-1">
+                                <i data-lucide="map-pin" class="w-3.5 h-3.5"></i> 지역사회 주제
+                            </div>
+                            <p id="summary-topic" class="text-sm font-semibold text-slate-800 break-words">작성된 내용이 없습니다.</p>
+                        </div>
+                        <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
+                            <div class="text-xs font-bold text-emerald-600 uppercase mb-1 flex items-center gap-1">
+                                <i data-lucide="users" class="w-3.5 h-3.5"></i> 예상 독자
+                            </div>
+                            <p id="summary-audience" class="text-sm font-semibold text-slate-800 break-words">작성된 내용이 없습니다.</p>
+                        </div>
+                        <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
+                            <div class="text-xs font-bold text-amber-600 uppercase mb-1 flex items-center gap-1">
+                                <i data-lucide="share-2" class="w-3.5 h-3.5"></i> 활용 매체
+                            </div>
+                            <p id="summary-media" class="text-sm font-semibold text-slate-800 break-words">작성된 내용이 없습니다.</p>
+                        </div>
+                    </div>
+
+                    <!-- 핵심 주장 강조 박스 -->
+                    <div class="bg-indigo-50 border-l-4 border-indigo-600 p-4 rounded-r-xl">
+                        <div class="text-xs font-bold text-indigo-800 mb-1">💡 나의 핵심 주장</div>
+                        <p id="summary-claim" class="text-sm sm:text-base font-bold text-indigo-950">핵심 주장을 입력해 주세요.</p>
+                    </div>
+
+                    <!-- 논증 근거 2단 카드 -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
+                            <div class="flex items-center justify-between mb-2">
+                                <span class="text-xs font-bold text-slate-500">근거 1</span>
+                                <span id="summary-arg1-method" class="text-xs font-bold bg-indigo-100 text-indigo-700 px-2.5 py-0.5 rounded-full">논증 방법 미선택</span>
+                            </div>
+                            <p id="summary-arg1-content" class="text-sm text-slate-700 whitespace-pre-line">근거 내용이 비어 있습니다.</p>
+                        </div>
+                        <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
+                            <div class="flex items-center justify-between mb-2">
+                                <span class="text-xs font-bold text-slate-500">근거 2</span>
+                                <span id="summary-arg2-method" class="text-xs font-bold bg-emerald-100 text-emerald-700 px-2.5 py-0.5 rounded-full">논증 방법 미선택</span>
+                            </div>
+                            <p id="summary-arg2-content" class="text-sm text-slate-700 whitespace-pre-line">근거 내용이 비어 있습니다.</p>
+                        </div>
+                    </div>
+
+                    <!-- 서론/본론/결론 개요 띠 -->
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-3 pt-1">
+                        <div class="bg-purple-50/80 border border-purple-200 rounded-lg p-3">
+                            <span class="text-xs font-bold text-purple-800 block mb-1">[서론 개요]</span>
+                            <p id="summary-outline-intro" class="text-xs text-slate-700 whitespace-pre-line">-</p>
+                        </div>
+                        <div class="bg-blue-50/80 border border-blue-200 rounded-lg p-3">
+                            <span class="text-xs font-bold text-blue-800 block mb-1">[본론 개요]</span>
+                            <p id="summary-outline-body" class="text-xs text-slate-700 whitespace-pre-line">-</p>
+                        </div>
+                        <div class="bg-teal-50/80 border border-teal-200 rounded-lg p-3">
+                            <span class="text-xs font-bold text-teal-800 block mb-1">[결론 개요]</span>
+                            <p id="summary-outline-conclusion" class="text-xs text-slate-700 whitespace-pre-line">-</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 하단: 서론 - 본론 - 결론 초고 작성 영역 -->
+            <div class="bg-white rounded-2xl shadow-md border border-slate-200 p-5 sm:p-8 space-y-6">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-200 pb-4">
+                    <div>
+                        <h2 class="text-xl font-extrabold text-slate-900 flex items-center gap-2">
+                            <i data-lucide="file-text" class="w-6 h-6 text-indigo-600"></i>
+                            주장하는 글 초고 쓰기
+                        </h2>
+                        <p class="text-sm text-slate-500 mt-1">위에서 정리한 계획과 논증 방법을 연결하여 자연스러운 문단으로 글을 완성해 보세요.</p>
+                    </div>
+                    <div class="bg-slate-100 px-4 py-2 rounded-xl text-right shrink-0">
+                        <span class="text-xs text-slate-500 block">총 글자 수 (공백 포함)</span>
+                        <span id="total-char-count" class="text-lg font-extrabold text-indigo-600">0</span><span class="text-xs font-bold text-slate-600"> 자</span>
+                    </div>
+                </div>
+
+                <!-- 글의 제목 -->
+                <div>
+                    <label class="block text-sm font-bold text-slate-700 mb-1.5">글의 제목 (독자의 시선을 사로잡는 제목을 지어보세요)</label>
+                    <input type="text" id="draft-title" oninput="saveData(); updateCharCount();"
+                        placeholder="예: 제목을 입력해 주세요"
+                        class="w-full rounded-xl border-2 border-slate-200 px-4 py-3 text-base sm:text-lg font-bold text-slate-900 focus:border-indigo-500 outline-none transition">
+                </div>
+
+                <!-- 1. 서론 작성 칸 -->
+                <div class="space-y-2">
+                    <div class="flex flex-wrap items-center justify-between gap-2">
+                        <label class="text-base font-bold text-purple-900 flex items-center gap-2">
+                            <span class="bg-purple-600 text-white text-xs px-2.5 py-1 rounded-md">서론</span>
+                            문제 제기 및 주장 제시하기
+                        </label>
+                        <span class="text-xs text-slate-500" id="intro-char-count">0자</span>
+                    </div>
+                    <div class="bg-purple-50 text-purple-800 text-xs px-3.5 py-2 rounded-lg flex items-center gap-2">
+                        <i data-lucide="info" class="w-4 h-4 shrink-0"></i>
+                        <span>작성 팁: 선택한 매체와 예상 독자에 어울리는 인사나 흥미로운 질문·사례로 시작하고, 핵심 주장을 분명하게 드러내세요.</span>
+                    </div>
+                    <textarea id="draft-intro" rows="5" oninput="saveData(); updateCharCount();"
+                        placeholder="서론 내용을 작성하세요..."
+                        class="w-full rounded-xl border border-slate-300 p-4 text-slate-800 leading-relaxed focus:border-purple-500 focus:ring-2 focus:ring-purple-200 outline-none transition"></textarea>
+                </div>
+
+                <!-- 2. 본론 작성 칸 -->
+                <div class="space-y-2">
+                    <div class="flex flex-wrap items-center justify-between gap-2">
+                        <label class="text-base font-bold text-indigo-900 flex items-center gap-2">
+                            <span class="bg-indigo-600 text-white text-xs px-2.5 py-1 rounded-md">본론</span>
+                            논증 방법(귀납·연역·유추)을 활용하여 근거 펼치기
+                        </label>
+                        <span class="text-xs text-slate-500" id="body-char-count">0자</span>
+                    </div>
+                    <div class="bg-indigo-50 text-indigo-800 text-xs px-3.5 py-2 rounded-lg flex items-center gap-2">
+                        <i data-lucide="info" class="w-4 h-4 shrink-0"></i>
+                        <span>작성 팁: 근거마다 문단을 나누어 쓰면 읽기가 훨씬 쉽습니다. '첫째, ~ 때문이다. 실제로 ~'와 같이 논리적 연결어를 활용해 보세요.</span>
+                    </div>
+                    <textarea id="draft-body" rows="9" oninput="saveData(); updateCharCount();"
+                        placeholder="본론 내용을 작성하세요 (근거 1과 근거 2를 문단으로 나누어 논리적으로 전개해 보세요)..."
+                        class="w-full rounded-xl border border-slate-300 p-4 text-slate-800 leading-relaxed focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 outline-none transition"></textarea>
+                </div>
+
+                <!-- 3. 결론 작성 칸 -->
+                <div class="space-y-2">
+                    <div class="flex flex-wrap items-center justify-between gap-2">
+                        <label class="text-base font-bold text-teal-900 flex items-center gap-2">
+                            <span class="bg-teal-600 text-white text-xs px-2.5 py-1 rounded-md">결론</span>
+                            주장 강조 및 실천 촉구하기
+                        </label>
+                        <span class="text-xs text-slate-500" id="conclusion-char-count">0자</span>
+                    </div>
+                    <div class="bg-teal-50 text-teal-800 text-xs px-3.5 py-2 rounded-lg flex items-center gap-2">
+                        <i data-lucide="info" class="w-4 h-4 shrink-0"></i>
+                        <span>작성 팁: 본론의 핵심 근거를 간략히 요약하고, 주장이 받아들여졌을 때 우리 지역사회가 어떻게 긍정적으로 변할지 강조하며 마무리하세요.</span>
+                    </div>
+                    <textarea id="draft-conclusion" rows="5" oninput="saveData(); updateCharCount();"
+                        placeholder="결론 내용을 작성하세요..."
+                        class="w-full rounded-xl border border-slate-300 p-4 text-slate-800 leading-relaxed focus:border-teal-500 focus:ring-2 focus:ring-teal-200 outline-none transition"></textarea>
+                </div>
+
+                <!-- 하단 제출/복사/인쇄 버튼 모음 -->
+                <div class="pt-4 border-t border-slate-200 flex flex-col sm:flex-row items-center justify-between gap-3 no-print">
+                    <button onclick="switchTab(1)" class="w-full sm:w-auto px-5 py-3 rounded-xl border border-slate-300 text-slate-700 font-semibold hover:bg-slate-50 transition flex items-center justify-center gap-2">
+                        <i data-lucide="arrow-left" class="w-4 h-4"></i>
+                        <span>1단계 계획으로 돌아가기</span>
+                    </button>
+
+                    <div class="flex flex-wrap items-center gap-2 w-full sm:w-auto justify-end">
+                        <button onclick="copyFullDraft()" class="flex-1 sm:flex-initial bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-5 py-3 rounded-xl shadow transition flex items-center justify-center gap-2">
+                            <i data-lucide="copy" class="w-4 h-4"></i>
+                            <span>완성된 글 복사하기</span>
+                        </button>
+                        <button onclick="window.print()" class="flex-1 sm:flex-initial bg-slate-800 hover:bg-slate-900 text-white font-bold px-5 py-3 rounded-xl shadow transition flex items-center justify-center gap-2">
+                            <i data-lucide="printer" class="w-4 h-4"></i>
+                            <span>인쇄 / PDF 저장</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- ==================== 생각 힌트 도우미 모달 ==================== -->
+    <div id="hint-modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-xs z-50 hidden flex items-center justify-center p-4 no-print">
+        <div class="bg-white rounded-2xl max-w-2xl w-full max-h-[85vh] flex flex-col shadow-2xl overflow-hidden animate-fade-in">
+            <!-- 모달 헤더 -->
+            <div class="bg-amber-500 text-white px-6 py-4 flex items-center justify-between">
+                <div class="flex items-center gap-2.5">
+                    <i data-lucide="sparkles" class="w-6 h-6"></i>
+                    <h3 class="font-extrabold text-lg">스스로 생각을 여는 힌트 도우미</h3>
+                </div>
+                <button onclick="toggleHintModal()" class="text-white/80 hover:text-white p-1 rounded-lg">
+                    <i data-lucide="x" class="w-6 h-6"></i>
+                </button>
+            </div>
+
+            <!-- 모달 카테고리 탭 -->
+            <div class="flex border-b border-slate-200 bg-amber-50/50 px-4 pt-2 gap-2 overflow-x-auto">
+                <button onclick="switchHintCategory('topic')" id="hint-tab-topic" class="hint-cat-btn px-4 py-2 text-sm font-bold rounded-t-lg bg-white text-amber-700 border-t border-x border-slate-200">
+                    ① 주제·매체 찾기
+                </button>
+                <button onclick="switchHintCategory('argument')" id="hint-tab-argument" class="hint-cat-btn px-4 py-2 text-sm font-medium rounded-t-lg text-slate-600 hover:text-slate-900">
+                    ② 논증 방법 이해
+                </button>
+                <button onclick="switchHintCategory('structure')" id="hint-tab-structure" class="hint-cat-btn px-4 py-2 text-sm font-medium rounded-t-lg text-slate-600 hover:text-slate-900">
+                    ③ 서론·본론·결론 질문
+                </button>
+            </div>
+
+            <!-- 모달 본문 -->
+            <div class="p-6 overflow-y-auto space-y-5 text-sm leading-relaxed text-slate-700">
+                
+                <!-- 힌트 1: 주제 및 매체 -->
+                <div id="hint-content-topic" class="space-y-4">
+                    <div class="bg-amber-50 border border-amber-200 rounded-xl p-4">
+                        <h4 class="font-bold text-amber-900 mb-1.5">🔍 우리 지역사회 주제를 찾는 질문</h4>
+                        <p class="text-amber-800 text-xs mb-2">정답은 없습니다! 내가 매일 지나다니는 길과 공간을 떠올려 보세요.</p>
+                        <ul class="list-disc pl-5 space-y-1.5 text-slate-700">
+                            <li><strong>등하굣길 안전:</strong> 학교 앞 횡단보도, 전동킥보드 주차, 어두운 골목길 가로등 중 불편하거나 위험했던 점은 무엇인가요?</li>
+                            <li><strong>환경과 쓰레기:</strong> 우리 동네 공원, 하천, 상가 주변의 쓰레기 분리배출이나 일회용품 사용 문제 중 개선할 점은 없나요?</li>
+                            <li><strong>청소년 공간과 문화:</strong> 중학생들이 방과 후에 안전하게 쉬거나 문화를 즐길 수 있는 공간·시설이 충분한가요?</li>
+                            <li><strong>공공시설 이용 예절:</strong> 동네 도서관, 버스 정류장, 아파트 단지 내에서 주민 간 배려가 필요한 문제는 무엇인가요?</li>
+                        </ul>
+                    </div>
+
+                    <div class="bg-blue-50 border border-blue-200 rounded-xl p-4">
+                        <h4 class="font-bold text-blue-900 mb-1.5">📢 예상 독자에 따른 매체 선택 힌트</h4>
+                        <p class="text-xs text-blue-800 mb-2">내 주장을 <strong>실제로 해결해 줄 수 있는 사람</strong>이 누구인지 먼저 생각해 보세요!</p>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5 text-xs">
+                            <div class="bg-white p-3 rounded-lg border border-blue-100">
+                                <span class="font-bold text-blue-700 block mb-1">또래 학생·학부모가 독자라면?</span>
+                                학교 누리집 게시판, 교지, 학급 SNS, 학교 방송 캠페인 등
+                            </div>
+                            <div class="bg-white p-3 rounded-lg border border-blue-100">
+                                <span class="font-bold text-blue-700 block mb-1">지역 주민 전체가 독자라면?</span>
+                                지역 신문 독자 투고란, 동네 커뮤니티 앱, 아파트 게시판 등
+                            </div>
+                            <div class="bg-white p-3 rounded-lg border border-blue-100 sm:col-span-2">
+                                <span class="font-bold text-blue-700 block mb-1">구청·시청·교육청 담당자가 독자라면?</span>
+                                시청/구청 누리집 '시장에게 바란다(민원 게시판)', 국민신문고, 청소년 의회 제안서 등
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 힌트 2: 논증 방법 -->
+                <div id="hint-content-argument" class="hidden space-y-4">
+                    <p class="text-xs text-slate-500">4-(1)단원에서 배운 세 가지 논증 방법의 구조를 떠올리며 내 근거에 적용해 보세요.</p>
+                    
+                    <div class="border border-indigo-200 rounded-xl p-4 bg-indigo-50/40">
+                        <h4 class="font-bold text-indigo-900 text-base mb-1">1. 귀납 논증 (구체적 사례 → 일반적 결론)</h4>
+                        <p class="text-xs text-slate-600 mb-2">여러 가지 구체적인 사실, 통계 자료, 설문 결과, 뉴스 사례를 모아서 공통된 결론을 이끌어내는 방법입니다.</p>
+                        <div class="bg-white p-3 rounded-lg text-xs border border-indigo-100 text-slate-700">
+                            <strong>생각 공식:</strong> "사례 A에서도 이런 문제가 발생했고, 통계 B에서도 수치가 높게 나타났다. 따라서 ~라는 주장은 타당하다."
+                        </div>
+                    </div>
+
+                    <div class="border border-emerald-200 rounded-xl p-4 bg-emerald-50/40">
+                        <h4 class="font-bold text-emerald-900 text-base mb-1">2. 연역 논증 (일반적 원리 → 구체적 결론)</h4>
+                        <p class="text-xs text-slate-600 mb-2">누구나 인정하는 보편적 원리, 법규, 도덕적 기준(대전제)에 우리 지역의 상황(소전제)을 적용해 결론을 내리는 방법입니다.</p>
+                        <div class="bg-white p-3 rounded-lg text-xs border border-emerald-100 text-slate-700">
+                            <strong>생각 공식:</strong> "모든 시민은 안전한 보행 환경을 누릴 권리가 있다(일반 원리). 그런데 우리 동네 ○○길은 보행 안전이 위협받고 있다(현재 상황). 그러므로 ~해야 한다(결론)."
+                        </div>
+                    </div>
+
+                    <div class="border border-purple-200 rounded-xl p-4 bg-purple-50/40">
+                        <h4 class="font-bold text-purple-900 text-base mb-1">3. 유추 (비슷한 대상의 원리 → 내 주장에 적용)</h4>
+                        <p class="text-xs text-slate-600 mb-2">우리 지역과 조건이 비슷한 다른 도시·학교의 성공 사례나 다른 현상의 원리를 비교하여 결론을 이끌어내는 방법입니다.</p>
+                        <div class="bg-white p-3 rounded-lg text-xs border border-purple-100 text-slate-700">
+                            <strong>생각 공식:</strong> "우리 지역과 규모가 비슷한 △△시에서도 ~한 정책을 시행해 큰 효과를 거두었다. 따라서 우리 지역에서도 같은 방식을 도입하면 문제를 해결할 수 있을 것이다."
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 힌트 3: 서론-본론-결론 질문 -->
+                <div id="hint-content-structure" class="hidden space-y-3">
+                    <div class="bg-purple-50 p-4 rounded-xl border border-purple-200">
+                        <h4 class="font-bold text-purple-900 mb-1">서론을 쓸 때 스스로 던져볼 질문</h4>
+                        <ul class="list-disc pl-5 text-xs space-y-1 text-slate-700">
+                            <li>독자가 이 글을 왜 읽어야 하는지 관심을 끌 만한 질문이나 최근 뉴스를 언급했나요?</li>
+                            <li>내가 다루려는 지역사회 문제가 무엇인지 한눈에 드러나나요?</li>
+                            <li>글쓴이의 핵심 주장이 무엇인지 분명하게 밝혔나요?</li>
+                        </ul>
+                    </div>
+                    <div class="bg-indigo-50 p-4 rounded-xl border border-indigo-200">
+                        <h4 class="font-bold text-indigo-900 mb-1">본론을 쓸 때 스스로 던져볼 질문</h4>
+                        <ul class="list-disc pl-5 text-xs space-y-1 text-slate-700">
+                            <li>근거의 출처(언제, 어디서 조사한 자료인지)가 믿을 만한가요?</li>
+                            <li>단순히 "불편하다", "좋을 것 같다"라는 느낌만 쓰지 않고 논증 방법(귀납·연역·유추)의 구조를 갖추었나요?</li>
+                            <li>예상되는 반론(예: 예산 부족, 관리의 어려움 등)을 미리 생각하고 보완책을 제시했나요?</li>
+                        </ul>
+                    </div>
+                    <div class="bg-teal-50 p-4 rounded-xl border border-teal-200">
+                        <h4 class="font-bold text-teal-900 mb-1">결론을 쓸 때 스스로 던져볼 질문</h4>
+                        <ul class="list-disc pl-5 text-xs space-y-1 text-slate-700">
+                            <li>앞에서 펼친 주장을 한 문장으로 힘 있게 다시 강조했나요?</li>
+                            <li>예상 독자(주민, 학생, 지자체 등)가 당장 실천할 수 있는 구체적인 행동을 제안했나요?</li>
+                        </ul>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- 모달 푸터 -->
+            <div class="bg-slate-50 px-6 py-3.5 border-t border-slate-200 flex justify-end">
+                <button onclick="toggleHintModal()" class="bg-slate-800 hover:bg-slate-900 text-white font-semibold px-5 py-2 rounded-xl text-sm transition">
+                    확인하고 내 생각 적으러 가기
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== 초기화 확인 모달 (alert/confirm 대체) ==================== -->
+    <div id="reset-modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-xs z-50 hidden flex items-center justify-center p-4 no-print">
+        <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl space-y-4">
+            <div class="flex items-center gap-3 text-rose-600">
+                <div class="bg-rose-100 p-2.5 rounded-full">
+                    <i data-lucide="alert-triangle" class="w-6 h-6"></i>
+                </div>
+                <h3 class="text-lg font-bold text-slate-900">작성한 내용을 모두 지울까요?</h3>
+            </div>
+            <p class="text-sm text-slate-600 leading-relaxed">
+                초기화를 누르면 1단계 계획표와 2단계 초고에 입력한 모든 내용이 삭제됩니다. 이 작업은 되돌릴 수 없습니다.
+            </p>
+            <div class="flex justify-end gap-2 pt-2">
+                <button onclick="closeResetModal()" class="px-4 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold text-sm transition">
+                    취소
+                </button>
+                <button onclick="confirmReset()" class="px-4 py-2 rounded-xl bg-rose-600 hover:bg-rose-700 text-white font-semibold text-sm transition">
+                    네, 모두 초기화합니다
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== 토스트 알림 메시지 ==================== -->
+    <div id="toast-box" class="fixed bottom-6 left-1/2 -translate-x-1/2 bg-slate-900 text-white px-5 py-3 rounded-full shadow-xl text-sm font-medium flex items-center gap-2 opacity-0 pointer-events-none transition-opacity duration-300 z-50 no-print">
+        <i data-lucide="check-circle-2" class="w-4 h-4 text-emerald-400"></i>
+        <span id="toast-message">알림 메시지</span>
+    </div>
+
+    <!-- JavaScript 로직 -->
+    <script>
+        // 아이콘 초기화
+        lucide.createIcons();
+
+        // 입력 필드 ID 목록
+        const fieldIds = [
+            'student-id', 'student-name',
+            'plan-topic', 'plan-audience', 'plan-media', 'plan-media-reason',
+            'plan-claim',
+            'plan-arg1-method', 'plan-arg1-content',
+            'plan-arg2-method', 'plan-arg2-content',
+            'plan-outline-intro', 'plan-outline-body', 'plan-outline-conclusion',
+            'draft-title', 'draft-intro', 'draft-body', 'draft-conclusion'
+        ];
+
+        // 메모리 내 상태 객체
+        let appState = {};
+
+        // 페이지 로드 시 초기화
+        window.addEventListener('DOMContentLoaded', () => {
+            fieldIds.forEach(id => {
+                appState[id] = '';
+            });
+            updateSummaryView();
+            updateCharCount();
+        });
+
+        // 데이터 상태 저장
+        function saveData() {
+            fieldIds.forEach(id => {
+                const el = document.getElementById(id);
+                if (el) {
+                    appState[id] = el.value;
+                }
+            });
+        }
+
+        // 탭 전환 함수 (1: 계획하기, 2: 요약 및 초고쓰기)
+        function switchTab(tabNumber) {
+            saveData();
+            const tab1Section = document.getElementById('tab1-content');
+            const tab2Section = document.getElementById('tab2-content');
+            const btnTab1 = document.getElementById('btn-tab1');
+            const btnTab2 = document.getElementById('btn-tab2');
+            const badge1 = document.getElementById('badge-tab1');
+            const badge2 = document.getElementById('badge-tab2');
+
+            if (tabNumber === 1) {
+                tab1Section.classList.remove('hidden');
+                tab2Section.classList.add('hidden');
+
+                btnTab1.classList.add('tab-active');
+                btnTab1.classList.remove('text-slate-500');
+                badge1.classList.replace('bg-slate-300', 'bg-indigo-600');
+
+                btnTab2.classList.remove('tab-active');
+                btnTab2.classList.add('text-slate-500');
+                badge2.classList.replace('bg-indigo-600', 'bg-slate-300');
+            } else {
+                // 탭2로 이동하기 전 요약 대시보드 최신화
+                updateSummaryView();
+                updateCharCount();
+
+                tab1Section.classList.add('hidden');
+                tab2Section.classList.remove('hidden');
+
+                btnTab2.classList.add('tab-active');
+                btnTab2.classList.remove('text-slate-500');
+                badge2.classList.replace('bg-slate-300', 'bg-indigo-600');
+
+                btnTab1.classList.remove('tab-active');
+                btnTab1.classList.add('text-slate-500');
+                badge1.classList.replace('bg-indigo-600', 'bg-slate-300');
+            }
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // 탭2 상단 요약 대시보드 데이터 반영
+        function updateSummaryView() {
+            const setText = (targetId, sourceId, fallback) => {
+                const val = (appState[sourceId] || '').trim();
+                const el = document.getElementById(targetId);
+                if (el) {
+                    el.textContent = val ? val : fallback;
+                    if (!val) {
+                        el.classList.add('text-slate-400', 'italic');
+                    } else {
+                        el.classList.remove('text-slate-400', 'italic');
+                    }
+                }
+            };
+
+            setText('summary-topic', 'plan-topic', '1단계에서 지역사회 주제를 입력해 주세요.');
+            setText('summary-audience', 'plan-audience', '1단계에서 예상 독자를 입력해 주세요.');
+            setText('summary-media', 'plan-media', '1단계에서 활용 매체를 입력해 주세요.');
+            setText('summary-claim', 'plan-claim', '1단계에서 나의 핵심 주장을 입력해 주세요.');
+
+            const arg1Method = appState['plan-arg1-method'];
+            document.getElementById('summary-arg1-method').textContent = arg1Method || '논증 방법 미선택';
+            setText('summary-arg1-content', 'plan-arg1-content', '1단계에서 첫 번째 근거를 작성해 주세요.');
+
+            const arg2Method = appState['plan-arg2-method'];
+            document.getElementById('summary-arg2-method').textContent = arg2Method || '논증 방법 미선택';
+            setText('summary-arg2-content', 'plan-arg2-content', '1단계에서 두 번째 근거를 작성해 주세요.');
+
+            setText('summary-outline-intro', 'plan-outline-intro', '서론 개요 미작성');
+            setText('summary-outline-body', 'plan-outline-body', '본론 개요 미작성');
+            setText('summary-outline-conclusion', 'plan-outline-conclusion', '결론 개요 미작성');
+        }
+
+        // 실시간 글자 수 계산
+        function updateCharCount() {
+            const titleLen = (document.getElementById('draft-title').value || '').length;
+            const introLen = (document.getElementById('draft-intro').value || '').length;
+            const bodyLen = (document.getElementById('draft-body').value || '').length;
+            const concLen = (document.getElementById('draft-conclusion').value || '').length;
+
+            document.getElementById('intro-char-count').textContent = `${introLen}자`;
+            document.getElementById('body-char-count').textContent = `${bodyLen}자`;
+            document.getElementById('conclusion-char-count').textContent = `${concLen}자`;
+            document.getElementById('total-char-count').textContent = (titleLen + introLen + bodyLen + concLen).toLocaleString();
+        }
+
+        // 힌트 모달 열기/닫기
+        function toggleHintModal() {
+            const modal = document.getElementById('hint-modal');
+            modal.classList.toggle('hidden');
+        }
+
+        // 특정 카테고리의 힌트 바로 열기
+        function openSpecificHint(category) {
+            switchHintCategory(category);
+            document.getElementById('hint-modal').classList.remove('hidden');
+        }
+
+        // 힌트 모달 내부 탭 전환
+        function switchHintCategory(category) {
+            const categories = ['topic', 'argument', 'structure'];
+            categories.forEach(cat => {
+                const contentEl = document.getElementById(`hint-content-${cat}`);
+                const tabEl = document.getElementById(`hint-tab-${cat}`);
+                if (cat === category) {
+                    contentEl.classList.remove('hidden');
+                    tabEl.classList.add('bg-white', 'text-amber-700', 'font-bold', 'border-t', 'border-x', 'border-slate-200');
+                    tabEl.classList.remove('text-slate-600', 'font-medium');
+                } else {
+                    contentEl.classList.add('hidden');
+                    tabEl.classList.remove('bg-white', 'text-amber-700', 'font-bold', 'border-t', 'border-x', 'border-slate-200');
+                    tabEl.classList.add('text-slate-600', 'font-medium');
+                }
+            });
+        }
+
+        // 완성된 글 클립보드 복사 (execCommand 활용)
+        function copyFullDraft() {
+            saveData();
+            const studentInfo = [appState['student-id'], appState['student-name']].filter(Boolean).join(' ');
+            const title = appState['draft-title'] || '(제목 없음)';
+            const intro = appState['draft-intro'] || '';
+            const body = appState['draft-body'] || '';
+            const conclusion = appState['draft-conclusion'] || '';
+
+            if (!intro && !body && !conclusion) {
+                showToast('복사할 초고 내용이 아직 비어 있습니다.');
+                return;
+            }
+
+            const formattedText = 
+`[논증 방법을 활용한 지역사회 주장하는 글]
+${studentInfo ? '작성자: ' + studentInfo + '\n' : ''}제목: ${title}
+매체: ${appState['plan-media'] || '-'} / 예상 독자: ${appState['plan-audience'] || '-'}
+
+${intro}
+
+${body}
+
+${conclusion}`;
+
+            const tempTextarea = document.createElement('textarea');
+            tempTextarea.value = formattedText;
+            document.body.appendChild(tempTextarea);
+            tempTextarea.select();
+            try {
+                document.execCommand('copy');
+                showToast('완성된 글이 클립보드에 복사되었습니다! 패들렛이나 문서에 붙여넣기 하세요.');
+            } catch (err) {
+                showToast('복사에 실패했습니다. 직접 드래그하여 복사해 주세요.');
+            }
+            document.body.removeChild(tempTextarea);
+        }
+
+        // 초기화 모달 제어
+        function openResetModal() {
+            document.getElementById('reset-modal').classList.remove('hidden');
+        }
+        function closeResetModal() {
+            document.getElementById('reset-modal').classList.add('hidden');
+        }
+        function confirmReset() {
+            fieldIds.forEach(id => {
+                const el = document.getElementById(id);
+                if (el) el.value = '';
+                appState[id] = '';
+            });
+            updateSummaryView();
+            updateCharCount();
+            closeResetModal();
+            switchTab(1);
+            showToast('모든 입력 내용이 초기화되었습니다.');
+        }
+
+        // 토스트 메시지 표시
+        let toastTimer;
+        function showToast(message) {
+            const toast = document.getElementById('toast-box');
+            const msgEl = document.getElementById('toast-message');
+            msgEl.textContent = message;
+            toast.classList.remove('opacity-0');
+            clearTimeout(toastTimer);
+            toastTimer = setTimeout(() => {
+                toast.classList.add('opacity-0');
+            }, 3000);
+        }
+    </script>
+</body>
+</html>
