@@ -102,22 +102,46 @@
         <!-- ==================== TAB 1: 계획 및 개요 작성 ==================== -->
         <section id="tab1-content" class="space-y-6">
             
-            <!-- 안내 배너 -->
-            <div class="bg-gradient-to-r from-indigo-600 to-blue-600 rounded-2xl p-5 sm:p-6 text-white shadow-md flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+            <!-- 안내 배너 및 개인정보 보호형 본인 인증 바 -->
+            <div class="bg-gradient-to-r from-indigo-600 to-blue-600 rounded-2xl p-5 sm:p-6 text-white shadow-md flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4">
                 <div>
                     <h2 class="text-lg sm:text-xl font-bold flex items-center gap-2">
                         <i data-lucide="compass" class="w-5 h-5"></i>
                         스스로 고민하며 빈칸을 채워봅시다!
                     </h2>
                     <p class="text-indigo-100 text-sm mt-1 leading-relaxed">
-                        주제와 활용할 매체, 논증 방법은 여러분이 직접 결정합니다. 막막할 때는 각 항목 옆의 <strong class="text-amber-200 underline cursor-pointer" onclick="toggleHintModal()">[힌트 보기]</strong> 버튼을 눌러 스스로 생각의 실마리를 찾아보세요.
+                        주제와 활용할 매체, 논증 방법은 여러분이 직접 결정합니다. 막막할 때는 <strong class="text-amber-200 underline cursor-pointer" onclick="toggleHintModal()">[생각 힌트 도우미]</strong>를 눌러 실마리를 찾아보세요.
                     </p>
                 </div>
-                <div class="bg-white/15 backdrop-blur-sm px-4 py-2.5 rounded-xl text-xs sm:text-sm shrink-0 border border-white/20">
-                    <div class="font-semibold text-amber-200">학번 / 이름</div>
-                    <div class="flex gap-2 mt-1">
-                        <input type="text" id="student-id" placeholder="예: 30101" class="w-24 bg-white/90 text-slate-900 px-2.5 py-1 rounded-lg text-sm font-medium focus:outline-none focus:ring-2 focus:ring-amber-300" oninput="saveData()">
-                        <input type="text" id="student-name" placeholder="이름 입력" class="w-28 bg-white/90 text-slate-900 px-2.5 py-1 rounded-lg text-sm font-medium focus:outline-none focus:ring-2 focus:ring-amber-300" oninput="saveData()">
+
+                <!-- 개인정보 보호 신원 확인 영역 (인증 후 화면에서 이름/학번 즉시 숨김 처리) -->
+                <div class="bg-white/15 backdrop-blur-sm px-4 py-3 rounded-xl text-xs sm:text-sm shrink-0 border border-white/25 w-full lg:w-auto">
+                    <div id="auth-input-box">
+                        <div class="font-semibold text-amber-200 flex items-center gap-1.5 mb-1.5">
+                            <i data-lucide="shield-check" class="w-4 h-4"></i>
+                            <span>본인 확인 (인증 후 화면에 노출되지 않음)</span>
+                        </div>
+                        <div class="flex flex-wrap gap-2">
+                            <input type="text" id="auth-id" placeholder="학번 (예: 30101)" autocomplete="off" class="w-28 bg-white/95 text-slate-900 px-2.5 py-1.5 rounded-lg text-xs sm:text-sm font-medium focus:outline-none focus:ring-2 focus:ring-amber-300">
+                            <input type="text" id="auth-name" placeholder="이름" autocomplete="off" class="w-24 bg-white/95 text-slate-900 px-2.5 py-1.5 rounded-lg text-xs sm:text-sm font-medium focus:outline-none focus:ring-2 focus:ring-amber-300">
+                            <input type="password" id="auth-pin" maxlength="4" placeholder="비밀번호 4자리" autocomplete="new-password" class="w-28 bg-white/95 text-slate-900 px-2.5 py-1.5 rounded-lg text-xs sm:text-sm font-medium focus:outline-none focus:ring-2 focus:ring-amber-300">
+                            <button onclick="authenticateStudent()" id="btn-auth" class="bg-amber-400 hover:bg-amber-300 text-slate-950 font-bold px-3.5 py-1.5 rounded-lg text-xs sm:text-sm transition shadow-sm">
+                                확인 / 불러오기
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- 인증 완료 시 표시되는 비식별 상태 배지 -->
+                    <div id="auth-verified-box" class="hidden flex items-center justify-between gap-4">
+                        <div class="flex items-center gap-2">
+                            <span class="bg-emerald-400 text-slate-950 text-xs font-extrabold px-2.5 py-1 rounded-full flex items-center gap-1">
+                                <i data-lucide="lock" class="w-3.5 h-3.5"></i> 본인 인증 완료
+                            </span>
+                            <span class="text-xs text-indigo-100">개인정보 보호를 위해 학번·이름이 가려졌습니다.</span>
+                        </div>
+                        <button onclick="logoutStudent()" class="text-xs underline text-amber-200 hover:text-white shrink-0">
+                            사용자 전환
+                        </button>
                     </div>
                 </div>
             </div>
@@ -287,9 +311,13 @@
                 </div>
             </div>
 
-            <!-- 다음 단계 이동 버튼 -->
-            <div class="flex justify-end pt-2">
-                <button onclick="switchTab(2)" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold px-6 py-3.5 rounded-xl shadow-lg hover:shadow-xl transition flex items-center gap-2 text-base">
+            <!-- 다음 단계 이동 및 DB 저장 버튼 -->
+            <div class="flex flex-wrap justify-between items-center gap-3 pt-2">
+                <button onclick="saveToGoogleSheet()" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-5 py-3.5 rounded-xl shadow-md hover:shadow-lg transition flex items-center gap-2 text-sm sm:text-base">
+                    <i data-lucide="cloud-upload" class="w-5 h-5"></i>
+                    <span>현재까지 계획 저장하기</span>
+                </button>
+                <button onclick="switchTab(2)" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold px-6 py-3.5 rounded-xl shadow-lg hover:shadow-xl transition flex items-center gap-2 text-sm sm:text-base ml-auto">
                     <span>계획 내용 정리하고 초고 쓰러 가기</span>
                     <i data-lucide="arrow-right" class="w-5 h-5"></i>
                 </button>
@@ -464,6 +492,10 @@
                     </button>
 
                     <div class="flex flex-wrap items-center gap-2 w-full sm:w-auto justify-end">
+                        <button onclick="saveToGoogleSheet()" class="flex-1 sm:flex-initial bg-indigo-600 hover:bg-indigo-700 text-white font-bold px-5 py-3 rounded-xl shadow transition flex items-center justify-center gap-2">
+                            <i data-lucide="cloud-upload" class="w-4 h-4"></i>
+                            <span>제출 및 DB 저장하기</span>
+                        </button>
                         <button onclick="copyFullDraft()" class="flex-1 sm:flex-initial bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-5 py-3 rounded-xl shadow transition flex items-center justify-center gap-2">
                             <i data-lucide="copy" class="w-4 h-4"></i>
                             <span>완성된 글 복사하기</span>
@@ -640,12 +672,14 @@
 
     <!-- JavaScript 로직 -->
     <script>
+        // ★ 중요: 1단계에서 복사한 구글 Apps Script 웹 앱 URL을 아래 따옴표 안에 붙여넣으세요!
+        const GOOGLE_SCRIPT_URL = '여기에_웹_앱_URL을_붙여넣으세요';
+
         // 아이콘 초기화
         lucide.createIcons();
 
-        // 입력 필드 ID 목록
+        // 입력 필드 ID 목록 (개인정보 필드는 제외하고 학습 내용만 관리)
         const fieldIds = [
-            'student-id', 'student-name',
             'plan-topic', 'plan-audience', 'plan-media', 'plan-media-reason',
             'plan-claim',
             'plan-arg1-method', 'plan-arg1-content',
@@ -654,8 +688,144 @@
             'draft-title', 'draft-intro', 'draft-body', 'draft-conclusion'
         ];
 
-        // 메모리 내 상태 객체
+        // 메모리 내 상태 객체 및 비공개 인증 세션
         let appState = {};
+        let authSession = {
+            verified: false,
+            studentId: '',
+            name: '',
+            pinHash: ''
+        };
+
+        // 비밀번호 단방향 해시 변환 (평문 노출 방지)
+        async function hashPin(pinText) {
+            const encoder = new TextEncoder();
+            const data = encoder.encode(pinText + '_kor_writing_salt');
+            const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+            const hashArray = Array.from(new Uint8Array(hashBuffer));
+            return hashArray.map(b => b.toString(16).padStart(2, '0')).join('').slice(0, 16);
+        }
+
+        // 학생 신원 확인 및 기존 작성 내역 불러오기
+        async function authenticateStudent() {
+            const idInput = document.getElementById('auth-id');
+            const nameInput = document.getElementById('auth-name');
+            const pinInput = document.getElementById('auth-pin');
+
+            const studentId = idInput.value.trim();
+            const name = nameInput.value.trim();
+            const pin = pinInput.value.trim();
+
+            if (!studentId || !name || pin.length < 4) {
+                showToast('학번, 이름, 4자리 비밀번호를 모두 입력해 주세요.');
+                return;
+            }
+
+            if (GOOGLE_SCRIPT_URL.includes('여기에_웹_앱_URL')) {
+                showToast('선생님 안내: index.html 코드에 Apps Script URL을 먼저 연결해 주세요.');
+                return;
+            }
+
+            const btn = document.getElementById('btn-auth');
+            btn.disabled = true;
+            btn.textContent = '확인 중...';
+
+            try {
+                const pinHash = await hashPin(pin);
+                const response = await fetch(GOOGLE_SCRIPT_URL, {
+                    method: 'POST',
+                    body: JSON.stringify({
+                        action: 'load',
+                        studentId: studentId,
+                        name: name,
+                        pinHash: pinHash
+                    })
+                });
+                const result = await response.json();
+
+                if (result.status === 'auth_fail') {
+                    showToast(result.message);
+                } else if (result.status === 'loaded' || result.status === 'new') {
+                    // 인증 성공 시 메모리 세션에만 보관하고 DOM 입력창의 개인정보는 즉시 파기
+                    authSession = { verified: true, studentId, name, pinHash };
+                    idInput.value = '';
+                    nameInput.value = '';
+                    pinInput.value = '';
+
+                    document.getElementById('auth-input-box').classList.add('hidden');
+                    document.getElementById('auth-verified-box').classList.remove('hidden');
+
+                    if (result.status === 'loaded' && result.payload) {
+                        fieldIds.forEach(id => {
+                            const el = document.getElementById(id);
+                            if (el && result.payload[id] !== undefined) {
+                                el.value = result.payload[id];
+                                appState[id] = result.payload[id];
+                            }
+                        });
+                        updateSummaryView();
+                        updateCharCount();
+                    }
+                    showToast(result.message);
+                } else {
+                    showToast(result.message || '인증 중 오류가 발생했습니다.');
+                }
+            } catch (error) {
+                showToast('서버 연결에 실패했습니다. 인터넷 연결이나 배포 권한을 확인해 주세요.');
+            } finally {
+                btn.disabled = false;
+                btn.textContent = '확인 / 불러오기';
+            }
+        }
+
+        // 사용자 전환 (현재 화면 초기화 및 인증 해제)
+        function logoutStudent() {
+            authSession = { verified: false, studentId: '', name: '', pinHash: '' };
+            fieldIds.forEach(id => {
+                const el = document.getElementById(id);
+                if (el) el.value = '';
+                appState[id] = '';
+            });
+            updateSummaryView();
+            updateCharCount();
+            document.getElementById('auth-verified-box').classList.add('hidden');
+            document.getElementById('auth-input-box').classList.remove('hidden');
+            showToast('로그아웃되었습니다. 새로운 사용자 정보를 입력해 주세요.');
+        }
+
+        // 구글 스프레드시트 데이터베이스에 저장
+        async function saveToGoogleSheet() {
+            saveData();
+            if (!authSession.verified) {
+                showToast('먼저 상단에서 학번·이름·비밀번호로 본인 확인을 완료해 주세요!');
+                switchTab(1);
+                return;
+            }
+
+            if (GOOGLE_SCRIPT_URL.includes('여기에_웹_앱_URL')) {
+                showToast('Apps Script 웹 앱 URL이 아직 설정되지 않았습니다.');
+                return;
+            }
+
+            showToast('스프레드시트에 안전하게 저장하는 중입니다...');
+
+            try {
+                const response = await fetch(GOOGLE_SCRIPT_URL, {
+                    method: 'POST',
+                    body: JSON.stringify({
+                        action: 'save',
+                        studentId: authSession.studentId,
+                        name: authSession.name,
+                        pinHash: authSession.pinHash,
+                        payload: appState
+                    })
+                });
+                const result = await response.json();
+                showToast(result.message || '저장이 완료되었습니다.');
+            } catch (error) {
+                showToast('저장 중 네트워크 오류가 발생했습니다. 다시 시도해 주세요.');
+            }
+        }
 
         // 페이지 로드 시 초기화
         window.addEventListener('DOMContentLoaded', () => {
@@ -792,10 +962,9 @@
             });
         }
 
-        // 완성된 글 클립보드 복사 (execCommand 활용)
+        // 완성된 글 클립보드 복사 (execCommand 활용 - 개인정보 미포함)
         function copyFullDraft() {
             saveData();
-            const studentInfo = [appState['student-id'], appState['student-name']].filter(Boolean).join(' ');
             const title = appState['draft-title'] || '(제목 없음)';
             const intro = appState['draft-intro'] || '';
             const body = appState['draft-body'] || '';
@@ -808,7 +977,7 @@
 
             const formattedText = 
 `[논증 방법을 활용한 지역사회 주장하는 글]
-${studentInfo ? '작성자: ' + studentInfo + '\n' : ''}제목: ${title}
+제목: ${title}
 매체: ${appState['plan-media'] || '-'} / 예상 독자: ${appState['plan-audience'] || '-'}
 
 ${intro}
@@ -847,7 +1016,7 @@ ${conclusion}`;
             updateCharCount();
             closeResetModal();
             switchTab(1);
-            showToast('모든 입력 내용이 초기화되었습니다.');
+            showToast('작성 중인 글 내용이 초기화되었습니다. (인증 상태는 유지됩니다)');
         }
 
         // 토스트 메시지 표시
